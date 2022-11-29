@@ -14,7 +14,6 @@ Aplicacion para administrar una sala de juntas la cual tiene como requerimientos
 - Actualizar una reservacion para una sala de juntas.
 - Eliminar una reservacion para una sala de juntas.
 
-
 Limitaciones:
 
 - No se puede reservar una sala de juntas si esta ya esta reservada en ese rango de tiempo y fecha
@@ -40,7 +39,16 @@ El servidor se encuentra en la carpeta `server` y se encuentra desarrollado en P
 El servidor se encarga de recibir las peticiones del cliente y realizar las operaciones necesarias para responder a las peticiones.
 
 Los endpoints que se utilizan son:
-- ...
+
+- `GET /salas/` para obtener todas las salas de juntas
+- `GET /salas/:id_sala/` para obtener una sala de juntas con sus reservaciones
+- `POST /salas/` para crear una sala de juntas {nombre, ubicacion}
+- `PUT /salas/:id_sala/` para actualizar una sala de juntas {id_sala, nombre, ubicacion}
+- `DELETE /salas/:id_sala/` para eliminar una sala de juntas
+- `GET /reservaciones/` para obtener todas las reservaciones
+- `POST /reservaciones/` para crear una reservacion {id_sala, fecha, hora_inicial, hora_final}
+- `PUT /reservaciones/:id_reservacion/` para actualizar una reservacion {id_reservacion, id_sala, fecha, hora_inicial, hora_final}
+- `DELETE /reservaciones/:id_reservacion/` para eliminar una reservacion
 
 ### Base de datos
 
@@ -48,7 +56,9 @@ La base de datos se encuentra en la carpeta `database` y se encuentra desarrolla
 La base de datos se encarga de almacenar la informacion de las salas de juntas y las reservaciones en dos tablas diferentes.
 
 Las tablas que se utilizan son:
-- ...
+
+- `salas` para almacenar la informacion de las salas de juntas {id_sala(int), nombre(varchar), ubicacion(varchar)}
+- `reservaciones` para almacenar la informacion de las reservaciones {id_reservacion(int), id_sala(int), fecha(date), hora_inicial(time), hora_final(time)}
 
 ### Cliente
 
@@ -56,5 +66,5 @@ El cliente se encuentra en la carpeta `client` y se encuentra desarrollado en Re
 El cliente se encarga de mostrar la informacion de las salas de juntas y las reservaciones y de enviar las peticiones al servidor para realizar las operaciones necesarias.
 
 Los componentes que se utilizan son:
-- ...
 
+- ...

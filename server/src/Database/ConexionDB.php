@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DB;
+namespace App\DataBase;
 
 use App\Config\ResponseHttp;
 

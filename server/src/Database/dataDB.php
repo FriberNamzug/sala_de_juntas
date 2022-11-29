@@ -1,6 +1,6 @@
 <?php
 
-use App\DB\ConexionDB;
+use App\DataBase\ConexionDB;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
 $dotenv->load();

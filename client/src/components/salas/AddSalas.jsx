@@ -27,18 +27,10 @@ export default function AddSalas({ close, update }) {
         setLoading(true);
         try {
             const { message } = await postSala(sala.nombre, sala.ubicacion);
-            setError({
-                message,
-                error: false,
-            });
             update();
-            setLoading(false);
+            toast.success(message);
             close();
         } catch (error) {
-            setError({
-                message: error.message,
-                error: true,
-            });
             console.log(error)
             setLoading(false);
         }
@@ -81,6 +73,7 @@ export default function AddSalas({ close, update }) {
                         variant="contained"
                         color="primary"
                         type="submit"
+                        disabled={loading}
                     >
                         {loading ? <CircularProgress /> : "Añadir"}
                     </Button>

@@ -26,18 +26,10 @@ export default function EditSalas({ sala, close, update }) {
         setLoading(true);
         try {
             const { message } = await putSala(salaEdit.id_sala, salaEdit.nombre, salaEdit.ubicacion);
-            setError({
-                message,
-                error: false,
-            });
+            toast.success(message);
             update();
-            setLoading(false);
             close();
         } catch (error) {
-            setError({
-                message: error.message,
-                error: true,
-            });
             console.log(error)
             setLoading(false);
         }

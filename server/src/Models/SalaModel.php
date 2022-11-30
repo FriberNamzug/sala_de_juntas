@@ -132,10 +132,27 @@ class SalaModel extends ConexionDB
             if ($query->rowCount() > 0) {
                 return ResponseHttp::status200($query->fetchAll());
             } else {
-                return ResponseHttp::status400("No existe la sala");
+                return ResponseHttp::status400("No existen reservaciones para esta sala");
             }
         } catch (\PDOException $e) {
             error_log("SalaModel::ListarSala -> " . $e);
+            die(json_encode(ResponseHttp::status500('No se pueden obtener los datos')));
+        }
+    }
+
+    final public static function buscarSalaSinReservar($params)
+    {
+        try {
+            //Obtendremos una lista de salas en las que no hayan reservaciones en la fecha y las horas enviadas
+            $conexion = self::obtenerConexion();
+            $query = $conexion->query("SELECT salas.id_sala, salas.nombre, salas.ubicacion FROM salas WHERE salas.id_sala NOT IN (SELECT reservaciones.id_sala FROM reservaciones WHERE reservaciones.fecha = '" .  date("Y-m-d", strtotime($params['fecha'])) . "' AND reservaciones.hora_inicial <= '" . $params['hora_final'] . "' AND reservaciones.hora_final >= '" . $params['hora_inicial'] . "')");
+            if ($query->rowCount() > 0) {
+                return ResponseHttp::status200($query->fetchAll());
+            } else {
+                return ResponseHttp::status400("No hay salas disponibles");
+            }
+        } catch (\PDOException $e) {
+            error_log("SalaModel::BuscarSalaSinReservar -> " . $e);
             die(json_encode(ResponseHttp::status500('No se pueden obtener los datos')));
         }
     }

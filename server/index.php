@@ -2,8 +2,23 @@
 
 use App\Config\ErrorLog;
 use App\Config\ResponseHttp;
+use Valitron\Validator as V;
 
 require './vendor/autoload.php';
+//Configuracion del validador de datos
+V::langDir(__DIR__ . "/vendor/vlucas/valitron/lang");
+V::lang('es');
+//Configuracion de la respuesta http
+header("Content-type: application/json; charset=utf-8");
+//Cors para permitir el acceso a la api desde cualquier origen, ////////////////solo para pruebas///////////////////////////
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method == "OPTIONS") {
+    die();
+}
 
 ErrorLog::activarErrorLog();
 

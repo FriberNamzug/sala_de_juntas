@@ -6,7 +6,6 @@ export const error = {
     ubicacion: {
         error: false,
         message: "",
-        data: ""
     }
 }
 

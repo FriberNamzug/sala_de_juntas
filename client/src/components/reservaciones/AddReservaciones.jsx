@@ -35,15 +35,14 @@ export default function AddReservaciones({ close, update }) {
             setStepTwo(true);
             setLoading(false);
         } catch (error) {
-            toast.error(error.message);
-            console.log(error.response)
-            toast.error(error.message);
+            setLoading(false);
+            toast.error(error.response.data.message);
+            console.log(error)
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(reservacion)
         try {
             setLoading(true);
             const { message } = await postReservacion(reservacion.sala, reservacion.hora_inicial, reservacion.hora_final, reservacion.fecha);

@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import Toast from './components/toast'
 
 import Inicio from './pages/Inicio'
 import NotFound from './pages/NotFound'
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Inicio />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toast />
     </Fragment>
   )
 }

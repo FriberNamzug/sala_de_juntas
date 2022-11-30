@@ -8,24 +8,22 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import { postSala } from "../../services/salas";
+import { validarRegistro, error as err } from '../../validations/sala.validation'
+import { toast } from 'react-toastify'
 
 export default function AddSalas({ close, update }) {
     const [loading, setLoading] = useState(false);
     const [sala, setSala] = useState({});
-    const [error, setError] = useState({
-        message: "",
-        error: false,
-    });
+    const [error, setError] = useState(err);
 
     const handleChange = (e) => {
-        setSala({
-            ...sala,
-            [e.target.name]: e.target.value,
-        });
+        setSala({ ...sala, [e.target.name]: e.target.value, });
+        setError({ ...error, [e.target.name]: validarRegistro(e) });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (error.nombre.error || error.ubicacion.error) return toast.error('Errores en el formulario');
         setLoading(true);
         try {
             const { message } = await postSala(sala.nombre, sala.ubicacion);
@@ -66,6 +64,8 @@ export default function AddSalas({ close, update }) {
                         onChange={handleChange}
                         margin="normal"
                         label="Nombre"
+                        error={error.nombre.error}
+                        helperText={error.nombre.message}
                     />
                     <TextField
                         name="ubicacion"
@@ -73,7 +73,8 @@ export default function AddSalas({ close, update }) {
                         onChange={handleChange}
                         margin="normal"
                         label="Ubicación"
-
+                        error={error.ubicacion.error}
+                        helperText={error.ubicacion.message}
                     />
 
                     <Button

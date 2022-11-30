@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { Fragment } from 'react'
+import { Routes, Route } from 'react-router-dom'
+
+import Inicio from './pages/Inicio'
+import NotFound from './pages/NotFound'
+
+
 
 function App() {
 
   return (
-    <div className="App">
-      <p>
-        Init React App
-      </p>
-    </div>
+    <Fragment>
+      <Routes>
+        <Route path="/" element={<Inicio />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Fragment>
   )
 }
 

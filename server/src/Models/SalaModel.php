@@ -143,13 +143,25 @@ class SalaModel extends ConexionDB
     final public static function buscarSalaSinReservar($params)
     {
         try {
-            //Obtendremos una lista de salas en las que no hayan reservaciones en la fecha y las horas enviadas
             $conexion = self::obtenerConexion();
-            $query = $conexion->query("SELECT salas.id_sala, salas.nombre, salas.ubicacion FROM salas WHERE salas.id_sala NOT IN (SELECT reservaciones.id_sala FROM reservaciones WHERE reservaciones.fecha = '" .  date("Y-m-d", strtotime($params['fecha'])) . "' AND reservaciones.hora_inicial <= '" . $params['hora_final'] . "' AND reservaciones.hora_final >= '" . $params['hora_inicial'] . "')");
-            if ($query->rowCount() > 0) {
-                return ResponseHttp::status200($query->fetchAll());
+            if ($params['id_reservacion']) {
+
+                $query = $conexion->query("SELECT id_reservacion FROM reservaciones WHERE id_reservacion = " . $params['id_reservacion']);
+                if ($query->rowCount() <= 0) return ResponseHttp::status400("La reservacion no existe");
+
+                $query = $conexion->query("SELECT salas.id_sala, salas.nombre, salas.ubicacion FROM salas WHERE salas.id_sala NOT IN (SELECT reservaciones.id_sala FROM reservaciones WHERE reservaciones.fecha = '" .  date("Y-m-d", strtotime($params['fecha'])) . "' AND reservaciones.hora_inicial <= '" . $params['hora_final'] . "' AND reservaciones.hora_final >= '" . $params['hora_inicial'] . "' AND reservaciones.id_reservacion != '" . $params['id_reservacion'] . "')");
+                if ($query->rowCount() > 0) {
+                    return ResponseHttp::status200($query->fetchAll());
+                } else {
+                    return ResponseHttp::status400("No hay salas disponibles");
+                }
             } else {
-                return ResponseHttp::status400("No hay salas disponibles");
+                $query = $conexion->query("SELECT salas.id_sala, salas.nombre, salas.ubicacion FROM salas WHERE salas.id_sala NOT IN (SELECT reservaciones.id_sala FROM reservaciones WHERE reservaciones.fecha = '" .  date("Y-m-d", strtotime($params['fecha'])) . "' AND reservaciones.hora_inicial <= '" . $params['hora_final'] . "' AND reservaciones.hora_final >= '" . $params['hora_inicial'] . "')");
+                if ($query->rowCount() > 0) {
+                    return ResponseHttp::status200($query->fetchAll());
+                } else {
+                    return ResponseHttp::status400("No hay salas disponibles");
+                }
             }
         } catch (\PDOException $e) {
             error_log("SalaModel::BuscarSalaSinReservar -> " . $e);

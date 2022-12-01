@@ -22,8 +22,9 @@ export const getSalaWithReservaciones = async (id) => {
     const { data } = await axios.get(`salas/${id}/`);
     return data;
 }
-export const getSalasSinReservaciones = async (fecha, hora_inicial, hora_final) => {
+export const getSalasSinReservaciones = async (fecha, hora_inicial, hora_final, id_reservacion = null) => {
     const dataSala = {
+        id_reservacion: id_reservacion,
         fecha: fecha,
         hora_inicial: hora_inicial,
         hora_final: hora_final

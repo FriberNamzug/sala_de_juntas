@@ -13,7 +13,7 @@ import UndoIcon from '@mui/icons-material/Undo';
 
 import { postReservacion } from "../../services/reservaciones";
 import { toast } from 'react-toastify'
-import { getSalasSinReservaciones } from "../../services/Salas";
+import { getSalasSinReservaciones } from "../../services/salas";
 import { validarRegistro, error as err } from '../../validations/reservacion.validation'
 
 export default function AddReservaciones({ close, update }) {
@@ -41,6 +41,7 @@ export default function AddReservaciones({ close, update }) {
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            if(error.response.status === 400) return toast.error('No hay salas disponibles');
             toast.error(error.response.data.message);
             console.log(error)
         }

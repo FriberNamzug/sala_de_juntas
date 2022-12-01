@@ -13,7 +13,7 @@ import UndoIcon from '@mui/icons-material/Undo';
 
 import { putReservacion } from "../../services/reservaciones";
 import { toast } from 'react-toastify'
-import { getSalasSinReservaciones } from "../../services/Salas";
+import { getSalasSinReservaciones } from "../../services/salas";
 import { validarRegistro, error as err } from '../../validations/reservacion.validation'
 
 export default function EditReservaciones({ reservacion, close, update }) {
@@ -35,17 +35,19 @@ export default function EditReservaciones({ reservacion, close, update }) {
 
     const handleNext = async (e) => {
         e.preventDefault();
-        if(reservacion.fecha === reserva.fecha && reservacion.hora_inicial.slice(0, -3) === reserva.hora_inicial && reservacion.hora_final.slice(0, -3) === reserva.hora_final) return toast.error('No se han realizado cambios');
+        if (reservacion.fecha === reserva.fecha && reservacion.hora_inicial.slice(0, -3) === reserva.hora_inicial && reservacion.hora_final.slice(0, -3) === reserva.hora_final) return toast.error('No se han realizado cambios');
         if (error.fecha.error || error.hora_inicial.error || error.hora_final.error) return toast.error('Errores en el formulario');
         try {
             setLoading(true);
-            const { message } = await getSalasSinReservaciones(reserva.fecha, reserva.hora_inicial, reserva.hora_final);
+            console.log(reserva.id_reservacion)
+            const { message } = await getSalasSinReservaciones(reserva.fecha, reserva.hora_inicial, reserva.hora_final, reservacion.id_reservacion);
             setSalasDisponibles(message);
             setStepOne(false);
             setStepTwo(true);
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            if(error.response.status === 400) return toast.error('No hay salas disponibles');
             toast.error(error.response.data.message);
             console.log(error)
         }

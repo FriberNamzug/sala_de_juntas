@@ -147,8 +147,8 @@ class ReservacionModel extends ConexionDB
 
             //Cada vez que se haga esta consulta vamos a aprovechar para
             //Quitarnos las reservaciones que ya pasaron de fecha y hora
-            //Solo vamos a cambiar el status a 0
-            $query = $conexion->query("UPDATE reservaciones SET status = 0 WHERE fecha < '" . date("Y-m-d") . "' OR (fecha = '" . date("Y-m-d") . "' AND hora_final < '" . date("H:i:s") . "')");
+            //*Se borra* para evitar conflictos al eliminar las salas
+            $query = $conexion->query("DELETE FROM reservaciones WHERE fecha < '" . date("Y-m-d") . "' OR (fecha = '" . date("Y-m-d") . "' AND hora_final < '" . date("H:i:s") . "')");
 
             //La consulta para listar las reservaciones
             $query = $conexion->query("SELECT reservaciones.id_reservacion, salas.nombre, salas.ubicacion, reservaciones.hora_inicial, reservaciones.hora_final, reservaciones.fecha FROM reservaciones INNER JOIN salas ON reservaciones.id_sala = salas.id_sala WHERE reservaciones.status = 1");

@@ -86,7 +86,10 @@ export default function PageSalas() {
                         Agregar
                     </Button>
                 </div>
-                {loading ? <div className='flex justify-center m-5'><CircularProgress /></div> :
+                {loading && <div className='flex justify-center m-5'><CircularProgress /></div>}
+                {error && <div className='text-center text-color5 m-5'>Error al cargar las salas</div>}
+
+                {!loading && !error &&
                     <List>
                         {salas.map((sala) => (
                             <Fragment key={sala.id_sala}>
@@ -115,7 +118,7 @@ export default function PageSalas() {
                         ))}
                     </List>
                 }
-                {error && <div className='text-center text-color5 m-5'>Error al cargar las salas</div>}
+
 
             </div>
 

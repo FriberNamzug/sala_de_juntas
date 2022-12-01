@@ -29,6 +29,7 @@ export default function PageReservaciones() {
     const [update, setUpdate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [error, setError] = useState(false)
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -80,7 +81,10 @@ export default function PageReservaciones() {
                     </Button>
                 </div>
                 <div className='m-2'>
-                    {loading ? <div className='flex justify-center m-5'><CircularProgress /></div> :
+                    {loading && <div className='flex justify-center m-5'><CircularProgress /></div>}
+                    {error && <div className='text-center text-color5 m-5'>Error al cargar las salas</div>}
+
+                    {!loading && !error &&
                         <List
                             sx={{
                                 width: '100%',
@@ -89,8 +93,6 @@ export default function PageReservaciones() {
                                 overflow: 'auto',
                                 maxHeight: 450,
                                 '& ul': { padding: 0 },
-                                '-moz-border-radius': '10px',
-                                '-webkit-border-radius': '10px',
                                 backgroundColor: 'background.paper',
                             }}
                             subheader={<li />}
@@ -125,6 +127,7 @@ export default function PageReservaciones() {
                         </List>
                     }
                 </div>
+
             </div>
 
             <Menu

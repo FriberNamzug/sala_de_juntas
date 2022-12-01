@@ -7,26 +7,31 @@ import {
     Select,
     MenuItem,
     FormControl,
-    Input
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import UndoIcon from '@mui/icons-material/Undo';
 
 import { postReservacion } from "../../services/reservaciones";
 import { toast } from 'react-toastify'
 import { getSalasSinReservaciones } from "../../services/Salas";
+import { validarRegistro, error as err } from '../../validations/reservacion.validation'
 
 export default function AddReservaciones({ close, update }) {
     const [loading, setLoading] = useState(false);
     const [reservacion, setReservacion] = useState({});
     const [salasDisponibles, setSalasDisponibles] = useState([]);
+    const [error, setError] = useState(err);
     const [stepOne, setStepOne] = useState(true);
     const [stepTwo, setStepTwo] = useState(false);
 
     const handleChange = (e) => {
         setReservacion({ ...reservacion, [e.target.name]: e.target.value, });
+        setError({ ...error, [e.target.name]: validarRegistro(e) });
+
     };
     const handleNext = async (e) => {
         e.preventDefault();
+        if (error.fecha.error || error.hora_inicial.error || error.hora_final.error) return toast.error('Errores en el formulario');
         try {
             setLoading(true);
             const { message } = await getSalasSinReservaciones(reservacion.fecha, reservacion.hora_inicial, reservacion.hora_final);
@@ -39,6 +44,12 @@ export default function AddReservaciones({ close, update }) {
             toast.error(error.response.data.message);
             console.log(error)
         }
+    }
+
+    const handleBack = () => {
+        setStepOne(true);
+        setStepTwo(false);
+        setReservacion({});
     }
 
     const handleSubmit = async (e) => {
@@ -83,6 +94,8 @@ export default function AddReservaciones({ close, update }) {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            error={error.fecha.error}
+                            helperText={error.fecha.message}
                         />
                         <div className="flex flex-row justify-around m-2">
                             <TextField
@@ -97,6 +110,8 @@ export default function AddReservaciones({ close, update }) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={error.hora_inicial.error}
+                                helperText={error.hora_inicial.message}
                             />
                             <TextField
                                 type="time"
@@ -110,6 +125,8 @@ export default function AddReservaciones({ close, update }) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={error.hora_final.error}
+                                helperText={error.hora_final.message}
                             />
                         </div>
 
@@ -133,6 +150,10 @@ export default function AddReservaciones({ close, update }) {
 
             {stepTwo &&
                 <div className="flex flex-col items-center justify-center m-5">
+                    <div className="flex flex-row justify-end w-full ">
+                        <p className="cursor-pointer mr-2 hover:font-bold duration-200" onClick={handleBack}>Regresar</p>
+                        <UndoIcon onClick={handleBack} className="cursor-pointer" />
+                    </div>
                     <form className="flex flex-col w-full" onSubmit={handleSubmit}>
                         <FormControl fullWidth margin="normal">
                             <InputLabel id="select_sala">Selecciona una de las salas disponibles</InputLabel>
@@ -146,7 +167,7 @@ export default function AddReservaciones({ close, update }) {
                                 required
                             >
                                 {salasDisponibles.map((sala) => (
-                                    <MenuItem value={sala.id_sala}>{sala.nombre}</MenuItem>
+                                    <MenuItem key={sala.id_sala} value={sala.id_sala}>{sala.nombre}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>

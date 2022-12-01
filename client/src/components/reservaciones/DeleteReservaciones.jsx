@@ -8,14 +8,14 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { toast } from 'react-toastify'
 import { deleteReservacion } from "../../services/reservaciones";
-export default function DeleteReservaciones({ reservacion, close, update }) {
+export default function DeleteReservaciones({ reservacion, close, update, finalizar = false }) {
     const [loading, setLoading] = useState(false);
 
     const handleDelete = async () => {
         setLoading(true);
         try {
             const { message } = await deleteReservacion(reservacion.id_reservacion);
-            toast.success(message);
+            toast.success(finalizar ? "Reservación finalizada" : message);
             update();
             close();
         } catch (error) {
@@ -33,8 +33,8 @@ export default function DeleteReservaciones({ reservacion, close, update }) {
                 />
             </div>
             <div>
-                <h1 className="text-center text-2xl font-bold">Eliminar Reservación</h1>
-                <p className="text-center text-red">¿Estas seguro de eliminar esta reservación?</p>
+                <h1 className="text-center text-2xl font-bold">{finalizar ? "Finalizar Reservacion" : "Eliminar Reservación"}</h1>
+                <p className="text-center text-red">¿Estas seguro de {finalizar ? "finalizar" : "eliminar"} esta reservación?</p>
             </div>
             <div className="flex flex-row items-center m-5">
                 <Button
@@ -45,7 +45,7 @@ export default function DeleteReservaciones({ reservacion, close, update }) {
                     sx={{ mx: 1 }}
                     disabled={loading}
                 >
-                    {loading ? <CircularProgress size={24} color={"inherit"} /> : "Eliminar"}
+                    {loading ? <CircularProgress size={24} color={"inherit"} /> : finalizar ? "Finalizar" : "Eliminar"}
                 </Button>
                 <Button
                     variant="contained"

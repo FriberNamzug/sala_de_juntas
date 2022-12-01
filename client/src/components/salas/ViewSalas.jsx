@@ -8,7 +8,8 @@ import {
     TableBody,
     TableRow,
     Modal,
-    IconButton
+    IconButton,
+    Tooltip
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -105,18 +106,22 @@ export default function ViewSalas({ sala, close }) {
                                                     <TableCell>{reservacion.hora_final}</TableCell>
                                                     <TableCell>
                                                         <div className="flex flex-row justify-around">
-                                                            <IconButton
-                                                                color="info"
-                                                                onClick={() => handleOpenEdit(reservacion)}
-                                                            >
-                                                                <EditIcon />
-                                                            </IconButton>
-                                                            <IconButton
-                                                                color="error"
-                                                                onClick={() => handleOpenDelete(reservacion)}
-                                                            >
-                                                                <DeleteIcon />
-                                                            </IconButton>
+                                                            <Tooltip title="Editar Reservacion">
+                                                                <IconButton
+                                                                    color="info"
+                                                                    onClick={() => handleOpenEdit(reservacion)}
+                                                                >
+                                                                    <EditIcon />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title="Finalizar Reservacion">
+                                                                <IconButton
+                                                                    color="error"
+                                                                    onClick={() => handleOpenDelete(reservacion)}
+                                                                >
+                                                                    <DeleteIcon />
+                                                                </IconButton>
+                                                            </Tooltip>
                                                         </div>
                                                     </TableCell>
                                                 </TableRow>
@@ -141,7 +146,7 @@ export default function ViewSalas({ sala, close }) {
             </Modal>
             <Modal open={openDelete} onClose={handleOpenDelete}>
                 <div style={modal}>
-                    <DeleteReservaciones reservacion={reservacion} close={handleOpenDelete} update={handleUpdate} />
+                    <DeleteReservaciones reservacion={reservacion} close={handleOpenDelete} update={handleUpdate} finalizar={true} />
                 </div>
             </Modal>
         </div>

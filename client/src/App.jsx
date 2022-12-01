@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Toast from './components/toast'
+import Toast from './components/Toast'
 
 import Inicio from './pages/Inicio'
 import NotFound from './pages/NotFound'

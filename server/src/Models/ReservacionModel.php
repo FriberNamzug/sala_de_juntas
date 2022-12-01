@@ -145,10 +145,23 @@ class ReservacionModel extends ConexionDB
         try {
             $conexion = self::obtenerConexion();
 
-            $query = $conexion->query("SELECT reservaciones.id_reservacion, salas.nombre, salas.ubicacion, reservaciones.hora_inicial, reservaciones.hora_final, reservaciones.fecha FROM reservaciones INNER JOIN salas ON reservaciones.id_sala = salas.id_sala");
+            //Cada vez que se haga esta consulta vamos a aprovechar para
+            //Quitarnos las reservaciones que ya pasaron de fecha y hora
+            //Solo vamos a cambiar el status a 0
+            $query = $conexion->query("UPDATE reservaciones SET status = 0 WHERE fecha < '" . date("Y-m-d") . "' OR (fecha = '" . date("Y-m-d") . "' AND hora_final < '" . date("H:i:s") . "')");
+
+            //La consulta para listar las reservaciones
+            $query = $conexion->query("SELECT reservaciones.id_reservacion, salas.nombre, salas.ubicacion, reservaciones.hora_inicial, reservaciones.hora_final, reservaciones.fecha FROM reservaciones INNER JOIN salas ON reservaciones.id_sala = salas.id_sala WHERE reservaciones.status = 1");
+            
 
             if ($query->rowCount() > 0) {
-                return ResponseHttp::status200($query->fetchAll(\PDO::FETCH_ASSOC));
+                //Ordenamos las reservaciones por fecha y hora de la mas proxima a la mas lejana
+                $reservaciones = $query->fetchAll(\PDO::FETCH_ASSOC);
+                usort($reservaciones, function ($a, $b) {
+                    return strtotime($a['fecha'] . " " . $a['hora_inicial']) - strtotime($b['fecha'] . " " . $b['hora_inicial']);
+                });
+
+                return ResponseHttp::status200($reservaciones);
             } else {
                 return ResponseHttp::status400("No hay reservaciones");
             }

@@ -33,7 +33,7 @@ export default function PageReservaciones() {
     const [update, setUpdate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [error, setError] = useState(false)
+    const [error, setError] = useState({ error: false, message: '' })
     const [updateProgress, setUpdateProgress] = useState(false)
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -66,9 +66,25 @@ export default function PageReservaciones() {
                 setUpdateProgress(false)
                 setLoading(false);
             } catch (error) {
-                setError(true);
-                setUpdateProgress(false)
-                setLoading(false);
+                try {
+                    if (error.response.status === 400) {
+                        setLoading(false)
+                        setUpdateProgress(false)
+                        setError({
+                            error: true,
+                            message: error.response.data.message
+                        })
+                        return
+                    }
+                } catch (error) {
+                    setLoading(false)
+                    setUpdateProgress(false)
+                    setSalas([])
+                    setError({
+                        error: true,
+                        message: 'Error al cargar las salas'
+                    })
+                }
             }
         }
         obtenerReservaciones();
@@ -97,7 +113,7 @@ export default function PageReservaciones() {
                 </div>
                 <div className='m-2'>
                     {loading && <div className='flex justify-center m-5'><CircularProgress /></div>}
-                    {error && <div className='text-center text-color5 m-5'>Error al cargar las salas</div>}
+                    {!loading && error && <div className='text-center text-color5 m-5'>{error.message}</div>}
 
                     {!loading && !error &&
                         <List

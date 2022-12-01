@@ -27,7 +27,7 @@ export default function PageSalas() {
     const [sala, setSala] = useState({})
     const [openAdd, setOpenAdd] = useState(false)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState({ error: false, message: '' })
     const [anchorEl, setAnchorEl] = useState(null);
     const [update, setUpdate] = useState(false);
     const [openView, setOpenView] = useState(false);
@@ -50,10 +50,24 @@ export default function PageSalas() {
                 setSalas(message)
                 setLoading(false)
             } catch (error) {
-                setError(true)
-                setLoading(false)
-                setSalas([])
-
+                try {
+                    if (error.response.status === 400) {
+                        setLoading(false)
+                        setSalas([])
+                        setError({
+                            error: true,
+                            message: error.response.data.message
+                        })
+                        return
+                    }
+                } catch (error) {
+                    setLoading(false)
+                    setSalas([])
+                    setError({
+                        error: true,
+                        message: 'Error al cargar las salas'
+                    })
+                }
             }
         }
         fetchSalas()
@@ -87,7 +101,7 @@ export default function PageSalas() {
                     </Button>
                 </div>
                 {loading && <div className='flex justify-center m-5'><CircularProgress /></div>}
-                {error && <div className='text-center text-color5 m-5'>Error al cargar las salas</div>}
+                {!loading && error.error && <div className='text-center text-color5 m-5'>{error.message}</div>}
 
                 {!loading && !error &&
                     <List>

@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from 'react'
 import {
     Button,
     CircularProgress,
+    LinearProgress,
     List,
     ListItemText,
     IconButton,
@@ -10,7 +11,8 @@ import {
     MenuItem,
     Divider,
     Modal,
-    Fade
+    Fade,
+    Tooltip,
 } from '@mui/material'
 import modal from '../styles/modal';
 
@@ -20,6 +22,7 @@ import EditReservaciones from './EditReservaciones'
 
 
 import { getReservaciones } from '../../services/reservaciones'
+import CachedIcon from '@mui/icons-material/Cached';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 export default function PageReservaciones() {
 
@@ -31,6 +34,7 @@ export default function PageReservaciones() {
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [error, setError] = useState(false)
+    const [updateProgress, setUpdateProgress] = useState(false)
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -50,19 +54,29 @@ export default function PageReservaciones() {
     };
 
 
+
+
     useEffect(() => {
         const obtenerReservaciones = async () => {
             try {
+                setUpdateProgress(true)
                 const { message } = await getReservaciones();
                 setReservaciones(message);
                 console.log(message)
+                setUpdateProgress(false)
                 setLoading(false);
             } catch (error) {
                 setError(true);
+                setUpdateProgress(false)
                 setLoading(false);
             }
         }
         obtenerReservaciones();
+        //Cada 20 segundos se actualiza la lista de reservaciones
+        const interval = setInterval(() => {
+            obtenerReservaciones();
+        }, 20000);
+        return () => clearInterval(interval);
     }, [update]);
 
     return (
@@ -98,6 +112,14 @@ export default function PageReservaciones() {
                             }}
                             subheader={<li />}
                         >
+                            {updateProgress && <LinearProgress variant="query" />}
+                            <div className='flex justify-end'>
+                                <Tooltip title='Actualizar'>
+                                    <IconButton onClick={handleUpdate} className='m-2' color='info'>
+                                        <CachedIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
                             {reservaciones.map((reservacion) => {
                                 const fecha = reservacion.fecha.split('-').reverse().join('-')
                                 return (

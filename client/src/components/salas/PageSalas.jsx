@@ -103,7 +103,7 @@ export default function PageSalas() {
                 {loading && <div className='flex justify-center m-5'><CircularProgress /></div>}
                 {!loading && error.error && <div className='text-center text-color5 m-5'>{error.message}</div>}
 
-                {!loading && !error &&
+                {!loading && !error.error &&
                     <List>
                         {salas.map((sala) => (
                             <Fragment key={sala.id_sala}>

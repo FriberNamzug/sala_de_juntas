@@ -108,7 +108,7 @@ export default function PageReservaciones() {
                                             secondary={`Inicio: ${reservacion.hora_inicial}`}
                                         />
                                         <ListItemText
-                                            primary={`Fecha: ${reservacion.fecha}`}
+                                            primary={`Fecha: ${new Date(reservacion.fecha).toLocaleDateString()}`}
                                             secondary={`Fin: ${reservacion.hora_final}`}
                                         />
                                         <IconButton

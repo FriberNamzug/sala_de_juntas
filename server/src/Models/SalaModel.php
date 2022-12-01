@@ -128,7 +128,7 @@ class SalaModel extends ConexionDB
     {
         try {
             $conexion = self::obtenerConexion();
-            $query = $conexion->query("SELECT reservaciones.id_reservacion, salas.nombre,salas.id_sala, salas.ubicacion, reservaciones.hora_inicial, reservaciones.hora_final, reservaciones.fecha FROM reservaciones INNER JOIN salas ON reservaciones.id_sala = salas.id_sala WHERE salas.id_sala = " . $id);
+            $query = $conexion->query("SELECT reservaciones.id_reservacion, salas.nombre,salas.id_sala, salas.ubicacion, reservaciones.hora_inicial, reservaciones.hora_final, reservaciones.fecha FROM reservaciones INNER JOIN salas ON reservaciones.id_sala = salas.id_sala WHERE salas.id_sala = " . $id . " AND reservaciones.status = 1");
             if ($query->rowCount() > 0) {
                 return ResponseHttp::status200($query->fetchAll());
             } else {

@@ -18,6 +18,7 @@ import AddReservaciones from './AddReservaciones'
 import DeleteReservaciones from './DeleteReservaciones'
 import EditReservaciones from './EditReservaciones'
 
+
 import { getReservaciones } from '../../services/reservaciones'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 export default function PageReservaciones() {
@@ -97,32 +98,35 @@ export default function PageReservaciones() {
                             }}
                             subheader={<li />}
                         >
-                            {reservaciones.map((reservacion) => (
-                                <Fragment key={reservacion.id_reservacion}>
-                                    <Divider classes={{ root: 'bg-color5' }} />
-                                    <ListItem
-                                        key={reservacion.id_reservacion}
-                                    >
-                                        <ListItemText
-                                            primary={`${reservacion.nombre}`}
-                                            secondary={`Inicio: ${reservacion.hora_inicial}`}
-                                        />
-                                        <ListItemText
-                                            primary={`Fecha: ${reservacion.fecha}`}
-                                            secondary={`Fin: ${reservacion.hora_final}`}
-                                        />
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={(e) => handleClick(e, reservacion)}
+                            {reservaciones.map((reservacion) => {
+                                const fecha = reservacion.fecha.split('-').reverse().join('-')
+                                return (
+                                    <Fragment key={reservacion.id_reservacion}>
+                                        <Divider classes={{ root: 'bg-color5' }} />
+                                        <ListItem
+                                            key={reservacion.id_reservacion}
                                         >
-                                            <MoreVertIcon />
-                                        </IconButton>
+                                            <ListItemText
+                                                primary={`${reservacion.nombre}`}
+                                                secondary={`Inicio: ${reservacion.hora_inicial}`}
+                                            />
+                                            <ListItemText
+                                                primary={`Fecha: ${fecha}`}
+                                                secondary={`Fin: ${reservacion.hora_final}`}
+                                            />
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={(e) => handleClick(e, reservacion)}
+                                            >
+                                                <MoreVertIcon />
+                                            </IconButton>
 
 
-                                    </ListItem>
-                                </Fragment>
-                            ))}
+                                        </ListItem>
+                                    </Fragment>
+                                )
+                            })}
 
                         </List>
                     }

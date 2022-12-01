@@ -95,30 +95,33 @@ export default function ViewSalas({ sala, close }) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {salaView.map((reservacion) => (
-                                            <TableRow key={reservacion.id_reservacion}>
-                                                <TableCell>{reservacion.id_reservacion}</TableCell>
-                                                <TableCell>{new Date(reservacion.fecha).toLocaleDateString()}</TableCell>
-                                                <TableCell>{reservacion.hora_inicial}</TableCell>
-                                                <TableCell>{reservacion.hora_final}</TableCell>
-                                                <TableCell>
-                                                    <div className="flex flex-row justify-around">
-                                                        <IconButton
-                                                            color="info"
-                                                            onClick={() => handleOpenEdit(reservacion)}
-                                                        >
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        <IconButton
-                                                            color="error"
-                                                            onClick={() => handleOpenDelete(reservacion)}
-                                                        >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {salaView.map((reservacion) => {
+                                            const fecha = reservacion.fecha.split('-').reverse().join('-')
+                                            return (
+                                                <TableRow key={reservacion.id_reservacion}>
+                                                    <TableCell>{reservacion.id_reservacion}</TableCell>
+                                                    <TableCell>{fecha}</TableCell>
+                                                    <TableCell>{reservacion.hora_inicial}</TableCell>
+                                                    <TableCell>{reservacion.hora_final}</TableCell>
+                                                    <TableCell>
+                                                        <div className="flex flex-row justify-around">
+                                                            <IconButton
+                                                                color="info"
+                                                                onClick={() => handleOpenEdit(reservacion)}
+                                                            >
+                                                                <EditIcon />
+                                                            </IconButton>
+                                                            <IconButton
+                                                                color="error"
+                                                                onClick={() => handleOpenDelete(reservacion)}
+                                                            >
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
                                     </TableBody>
                                 </Table>
                             </TableContainer>

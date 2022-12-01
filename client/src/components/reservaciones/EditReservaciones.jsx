@@ -31,6 +31,7 @@ export default function EditReservaciones({ reservacion, close, update }) {
 
     const handleChange = (e) => {
         setReserva({ ...reserva, [e.target.name]: e.target.value, });
+        setError({ ...error, [e.target.name]: validarRegistro(e) });
     }
 
     const handleNext = async (e) => {
@@ -47,7 +48,7 @@ export default function EditReservaciones({ reservacion, close, update }) {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            if(error.response.status === 400) return toast.error('No hay salas disponibles');
+            if (error.response.status === 400) return toast.error('No hay salas disponibles');
             toast.error(error.response.data.message);
             console.log(error)
         }

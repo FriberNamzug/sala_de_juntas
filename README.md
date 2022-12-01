@@ -26,10 +26,10 @@ Se decidio utilizar para el desarrollo del cliente el framework de ReactJS, para
 
 Ademas se utilizara servicios de terceros como:
 
-- [proceso](proceso) para el despliegue del servidor
-- [proceso](proceso) para el despliegue de la base de datos
-- [proceso](proceso) para el despliegue del cliente
-- [GitHub]([...]) para el control de versiones
+- AlwaysData para el despliegue del servidor
+- AlwaysData para el despliegue de la base de datos
+- Vercel para el despliegue del cliente
+- Github para el control de versiones
 
 ## Informacion de la aplicacion
 
@@ -45,6 +45,7 @@ Los endpoints que se utilizan son:
 - `POST /salas/` para crear una sala de juntas {nombre, ubicacion}
 - `PUT /salas/:id_sala/` para actualizar una sala de juntas {id_sala, nombre, ubicacion}
 - `DELETE /salas/:id_sala/` para eliminar una sala de juntas
+- `POST /salas/buscar/sin-reservar/` Para buscar salas de juntas sin reservar {id_reservacion(opcional), fecha, hora_inicio, hora_fin}
 - `GET /reservaciones/` para obtener todas las reservaciones
 - `POST /reservaciones/` para crear una reservacion {id_sala, fecha, hora_inicial, hora_final}
 - `PUT /reservaciones/:id_reservacion/` para actualizar una reservacion {id_reservacion, id_sala, fecha, hora_inicial, hora_final}
@@ -67,4 +68,24 @@ El cliente se encarga de mostrar la informacion de las salas de juntas y las res
 
 Los componentes que se utilizan son:
 
-- ...
+- TailwindCSS para el diseño de la aplicacion
+- React Router para el manejo de las rutas
+- React Hook Form para el manejo de los formularios
+- Axios para el manejo de las peticiones al servidor
+- React Toastify para el manejo de los mensajes de error
+- Mui Material para el manejo de los componentes de la aplicacion
+- Mui Icons para el manejo de los iconos de la aplicacion
+
+### Variables de entorno
+
+Cliente:
+
+- VITE_RUTA_API = "/server"
+
+Servidor:
+
+- DB_USER = Usuario de la base de datos
+- DB_PASSWORD = Contraseña de la base de datos
+- DB_DATABASE = Nombre de la base de datos
+- DB_HOST = Host de la base de datos
+- DB_PORT = Puerto de la base de datos

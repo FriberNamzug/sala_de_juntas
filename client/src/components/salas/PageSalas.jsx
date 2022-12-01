@@ -49,6 +49,7 @@ export default function PageSalas() {
                 const { message } = await getSalas()
                 setSalas(message)
                 setLoading(false)
+                setError({ error: false, message: '' })
             } catch (error) {
                 try {
                     if (error.response.status === 400) {

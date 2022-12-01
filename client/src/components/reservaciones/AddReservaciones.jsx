@@ -41,9 +41,11 @@ export default function AddReservaciones({ close, update }) {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            if(error.response.status === 400) return toast.error('No hay salas disponibles');
-            toast.error(error.response.data.message);
-            console.log(error)
+            try {
+                toast.error(error.response.data.message);
+            } catch (error) {
+                toast.error('Error al obtener las salas disponibles');
+            }
         }
     }
 

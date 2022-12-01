@@ -1,5 +1,5 @@
 const modal = {
-    width: "50%",
+    width: "600px",
     p: 4,
     position: "absolute",
     top: "50%",
